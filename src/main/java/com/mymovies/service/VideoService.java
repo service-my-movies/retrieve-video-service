@@ -23,6 +23,9 @@ public class VideoService implements IVideoService {
 	
 	@Value("${resource.api.language}")
 	private String Language;
+	
+	@Value("${service.url}")
+	private String serviceUrl;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(VideoService.class);
 	
@@ -32,9 +35,13 @@ public class VideoService implements IVideoService {
 	public VideosDTO getAPI_Video(String movie_id) {
 
 		VideosDTO video = null;
+		
+		String url = serviceUrl == "" ? BASE_URL+movie_id+"/videos"+API_KEY : serviceUrl+movie_id;
+		
+		LOGGER.info("@Get getAPI_Video Service URL : " + url);
 
 		try {
-			video = restTemplate.getForObject(BASE_URL+movie_id+"/videos"+API_KEY, VideosDTO.class);
+			video = restTemplate.getForObject(url, VideosDTO.class);
 		} catch (Exception e) {
 			LOGGER.error("Unexpected Error From Service: getAPI_Video: " + e);
 		}
